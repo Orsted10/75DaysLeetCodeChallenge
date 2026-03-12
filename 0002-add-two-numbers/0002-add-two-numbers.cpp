@@ -1,30 +1,17 @@
 class Solution {
 public:
     ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
-        ListNode* fakeHead = new ListNode();  // The poor dummy who takes the first hit 😅
-        ListNode* tail = fakeHead;
-        int leftover = 0;  // That annoying carry from last party
+        ListNode dummy(0);  // MVP dummy, takes no val abuse
+        ListNode* p = &dummy;  // Party pointer
+        int c = 0;  // Crappy carry
         
-        ListNode* a = l1;
-        ListNode* b = l2;
-        
-        while (a || b || leftover) {
-            int sum = leftover;
-            if (a) {
-                sum += a->val;
-                a = a->next;
-            }
-            if (b) {
-                sum += b->val;
-                b = b->next;
-            }
-            tail->next = new ListNode(sum % 10);  // The new digit joins the chain
-            tail = tail->next;
-            leftover = sum / 10;  // Whatever's left for next round
+        while (l1 || l2 || c) {
+            if (l1) { c += l1->val; l1 = l1->next; }
+            if (l2) { c += l2->val; l2 = l2->next; }
+            p->next = new ListNode(c % 10);
+            p = p->next;
+            c /= 10;
         }
-        
-        ListNode* answer = fakeHead->next;
-        delete fakeHead;  // Clean up the dummy, he's done his job
-        return answer;
+        return dummy.next;
     }
 };
