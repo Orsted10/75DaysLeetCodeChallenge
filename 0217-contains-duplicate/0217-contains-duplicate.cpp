@@ -1,19 +1,17 @@
 class Solution {
 public:
     bool containsDuplicate(vector<int>& nums) {
-        // Prep the hash set – reserve space so we don’t keep rehashing
-        unordered_set<int> seen;
-        seen.reserve(nums.size() * 2);          // rough 2× capacity to avoid collisions
-        seen.max_load_factor(0.25);             // keep the chain short, like a VIP line
+        // 1️⃣  Sort – now any duplicates become side‑by‑side twins
+        sort(nums.begin(), nums.end());          // in‑place, O(n log n)
 
-        // Scan and shout the moment we see a repeat
-        for (int x : nums) {                    // x = current suspect
-            if (seen.count(x)) {                // already in the club?
-                return true;                    // early bail – save those CPU cycles
+        // 2️⃣  Scan once and shout the moment we see a pair
+        int n = nums.size();                     // just for fun
+        for (int i = 0; i < n - 1; ++i) {        // stop before last element
+            if (nums[i] == nums[i + 1]) {        // twin found!
+                return true;                     // early exit, save CPU
             }
-            seen.insert(x);                     // otherwise, let x in and keep going
         }
-        // Made it to the end → everybody’s unique
+        // 3️⃣  Made it to the end → everybody’s unique
         return false;
     }
 };
